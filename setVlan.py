@@ -10,7 +10,7 @@ parser.add_argument('--tag', required=True, help='VLan tag e.g. 10')
 args = parser.parse_args()
 
 commands = [
-  f"qm set {args.id} --net0 virtio,bridge={args.vlan},tag={args.tag}",
+  f"qm set {args.id} --net0 virtio,bridge={args.bridge},tag={args.tag}",
 ]
 
 run_multiple_commands(commands)
