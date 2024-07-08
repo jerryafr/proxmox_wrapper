@@ -32,6 +32,11 @@ if exists:
     print(f"Error: VM with ID {args.id} already exists.")
     sys.exit(1)
 
+exists, output = run_command(f"ping -qc 1 -W 2 {args.ip} 2>&1 | grep -qw '1 received'")
+if exists:
+    print(f"Error: IP {args.ip} is already in use.")
+    sys.exit(1)
+
 # Create and configure the VM
 commands = [
     f"qm create {args.id} --name vm{args.name} --agent 1 --cpu host --cores {args.cpu} --memory {args.ram} --ciuser 'root' --cipassword '{args.password}' --net0 virtio,bridge=vmbr0 --ipconfig0 ip={args.ip}/{args.subnet},gw={args.gateway} --nameserver 8.8.4.4 --scsihw virtio-scsi-pci --machine q35",
@@ -55,5 +60,3 @@ for cmd in commands:
         sys.exit(1)
 
 print(f"VM {args.id} created and configured successfully.")
-
-
