@@ -1,3 +1,5 @@
+#  python3 createVm.py --ip 192.168.178.201
+
 import argparse
 from functions import run_command, run_multiple_commands
 
@@ -10,3 +12,5 @@ commands = [
   f"while ! nc -zv {args.ip} 22; do sleep 1; done; echo 'done'",
   f"sleep 10; ssh -o StrictHostKeyChecking=no root@{args.ip} 'apt update && apt upgrade -y'"
 ]
+
+run_multiple_commands(commands)
