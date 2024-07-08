@@ -1,4 +1,4 @@
-#  python3 createVm.py --ip 192.168.178.201
+#  python3 updateVm.py --ip 192.168.178.201
 
 import argparse
 from functions import run_command, run_multiple_commands

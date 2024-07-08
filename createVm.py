@@ -38,7 +38,6 @@ commands = [
     f"qm set {args.id} --bios ovmf --efidisk0 local:1,format=qcow2,efitype=4m,pre-enrolled-keys=1",
     f"qm set {args.id} --ide2 local:cloudinit",
     f"qm set {args.id} --sshkeys /root/.ssh/authorized_keys",
-    f"qm start {args.id}",
 ]
 
 run_multiple_commands(commands)
