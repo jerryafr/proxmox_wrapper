@@ -1,16 +1,8 @@
 #  python3 createVm.py --id 10000101 --name ethnode --cpu 4 --ram 4096 --disk 50G --os debian-12-generic-amd64-20240211 --ip 192.168.178.201 --gateway 192.168.178.1 --subnet 24 --pass HelloPass1
 
 import argparse
-import subprocess
 import sys
-
-# Function to run a command and return its output
-def run_command(command):
-    try:
-        output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True, universal_newlines=True)
-        return True, output
-    except subprocess.CalledProcessError as e:
-        return False, e.output
+from functions import run_command, run_multiple_commands
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Create and configure a Proxmox VM.')
@@ -46,17 +38,8 @@ commands = [
     f"qm set {args.id} --bios ovmf --efidisk0 local:1,format=qcow2,efitype=4m,pre-enrolled-keys=1",
     f"qm set {args.id} --ide2 local:cloudinit",
     f"qm set {args.id} --sshkeys /root/.ssh/authorized_keys",
-    f"qm start {args.id}",
-    f"while ! ping -c1 {args.ip}; do sleep 1; done; echo 'done'",
-    f"while ! nc -zv {args.ip} 22; do sleep 1; done; echo 'done'",
-    f"sleep 10; ssh -o StrictHostKeyChecking=no root@{args.ip} 'apt update && apt upgrade -y'"
 ]
 
-for cmd in commands:
-    print(f"going to run {cmd}")
-    success, output = run_command(cmd)
-    if not success:
-        print(f"Failed to execute command: {cmd}\nError: {output}")
-        sys.exit(1)
+run_multiple_commands(commands)
 
 print(f"VM {args.id} created and configured successfully.")
